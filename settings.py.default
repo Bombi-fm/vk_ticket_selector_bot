@@ -1,0 +1,88 @@
+TOKEN = ''
+GROUP_ID = ''
+
+CITIES = ['Москва', 'Питер', 'Варшава', 'Токио']
+SCHEDULE = []
+
+INTENTS = [
+    {
+        'name': 'help',
+        'tokens': ('/help', 'хелп', 'help'),
+        'scenario': None,
+        'answer': 'Данный бот является инструментом по заказу билетов на самолет.\n'
+                  'Для того, что бы начать процедуру заказа напишите /ticekt'
+    },
+    {
+        'name': 'Заказ билета',
+        'tokens': ('/ticket', 'ticket', 'билет'),
+        'scenario': 'booking',
+        'answer': None
+    }
+]
+
+SCENARIOS = {
+    'booking': {
+        'first_step': 'step1',
+        'steps': {
+            'step1': {
+                'text': 'Укажите город отправления ',
+                'failure_text': 'Такого города нет в рассписании,  есть - Москва Питер Варшава Токио',
+                'handler': 'handle_city_from',
+                'next_step': 'step2'
+            },
+            'step2': {
+                'text': 'Укажите город назначения ',
+                'failure_text': 'Такого города нет в рассписании,  есть - Москва Питер Варшава Токио',
+                'handler': 'handle_to_city',
+                'next_step': 'step3'
+            },
+            'step3': {
+                'text': 'Укажите предпочитаемую дату в формате DD-MM-YYYY',
+                'failure_text': 'ошибка шаг 3',
+                'handler': 'handle_date',
+                'next_step': 'step4'
+            },
+            'step4': {
+                'text': 'Подходящие рейсы:\n{suitable_flights_str}\nВыберите номер подходящего для вас',
+                'failure_text': 'ошибка шаг 4',
+                'handler': 'handle_flight_chose',
+                'next_step': 'step5'
+            },
+            'step5': {
+                'text': 'Укажите сколько мест вы хотите приобрести (от 1 до 5)',
+                'failure_text': 'Либо количество мест не подходит, либо я вас не понял',
+                'handler': 'handle_places',
+                'next_step': 'step6'
+            },
+            'step6': {
+                'text': 'Если у вас есть какие либо пожелания или коментарии, то укажите их здесь.'
+                        '\nЕсли нет, то просто отправте пробел.',
+                'failure_text': 'ошибка шаг 6',
+                'handler': 'handle_comment',
+                'next_step': 'step7'
+            },
+            'step7': {
+                'text': 'В итоге мы имеем:\nВаш рейс - {flight_chose}\nКоличество требуемых мест - {places_quantity}'
+                        '\nОтправьте- "да", если все верно и "нет" если что-то не так',
+                'failure_text': 'ошибка шаг 7',
+                'handler': 'handle_all_data',
+                'next_step': 'step8'
+            },
+            'step8': {
+                'text': 'Укажите контактный номер телефона',
+                'failure_text': 'ошибка шаг 8',
+                'handler': 'handle_number',
+                'next_step': 'step9'
+            },
+            'step9': {
+                'text': 'Ваш заказ оформлен!\nC вами свяжутся по введенному номеру - {phone_number}!\n',
+                'failure_text': 'ошибка шаг 9',
+                'handler': None,
+                'next_step': None
+            }
+
+        }
+    }
+}
+
+DEFAULT_ANSWER = "Основной функционал осуществляется через команды /ticket и /help "
